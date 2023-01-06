@@ -1,0 +1,55 @@
+To deploy the web application using Docker, you will need to do the following:
+
+Create a Dockerfile for the Django backend that specifies the base image, installs the necessary dependencies, and copies the code into the image.
+
+Create a Dockerfile for the React frontend that specifies the base image, installs the necessary dependencies, builds the React app, and copies the built app into the image.
+
+Build the Docker images for the backend and frontend using the docker build command.
+
+Create a docker-compose.yml file that defines the backend and frontend services and the network between them.
+
+Start the services using the docker-compose up command.
+
+Here is an example Dockerfile for the Django backend:
+
+Copy code
+FROM python:3.8
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install dependencies
+RUN pip install django==3.0
+RUN pip install transformers==3.0.0
+
+# copy code into the image
+COPY . /app
+WORKDIR /app
+
+# run the Django development server
+CMD python manage.py runserver 0.0.0.0:8000
+And here is an example Dockerfile for the React frontend:
+
+Copy code
+FROM node:14
+
+# set environment variables
+ENV NODE_ENV production
+ENV REACT_APP_BACKEND_URL http://backend:8000
+
+# install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn
+
+# copy code into the image
+COPY . /app
+WORKDIR /app
+
+# build the React app
+RUN yarn build
+
+# run the development server
+CMD yarn global add serve
+CMD serve -s build
