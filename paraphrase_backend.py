@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import transformers
 
-
+cscd
 
 # load the BART model 
 bart = transformers.BartModel.from_pretrained('bart-large')
