@@ -1,17 +1,19 @@
-import { Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useState } from 'react';
+import { Form, Input, Button } from 'antd';
 
-function ParaphraseForm() {
+function App() {
   const [form] = Form.useForm();
   const [paraphrasedTexts, setParaphrasedTexts] = useState([]);
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      const response = await axios.post('/api/paraphrase', values);
-      const paraphrasedTexts = response.data;  // This should be an array of objects with 'text' and 'similarity' properties
-      setParaphrasedTexts(paraphrasedTexts);
+      const response = await axios.post('/api/paraphrase', {
+        text: values.text,
+        num_paraphrases: 5
+      });
+      setParaphrasedTexts(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -27,11 +29,14 @@ function ParaphraseForm() {
           Paraphrase
         </Button>
       </Form.Item>
-      {paraphrasedTexts.map(({ text, similarity }) => (
-        <div key={text}>
-          {text} ({similarity}%)
+      {paraphrasedTexts.map(text => (
+        <div key={text.text}>
+          <p>{text.text}</p>
+          <p>Similarity score: {text.similarity_score}</p>
         </div>
       ))}
     </Form>
   );
 }
+
+export default App;
