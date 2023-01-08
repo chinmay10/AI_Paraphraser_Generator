@@ -1,0 +1,7 @@
+django
+djangorestframework
+fastapi
+torch
+sentence-transformers
+pylev
+transformers
